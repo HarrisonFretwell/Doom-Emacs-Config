@@ -106,24 +106,26 @@
 ;;          ("<tab>" . 'my-tab)
 ;;          ("TAB" . 'my-tab)))
 
-(with-eval-after-load 'flycheck
-    (flycheck-add-mode 'javascript-eslint 'typescript-mode)
-    (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
-)
-(setq-hook! 'js2-mode-hook flycheck-checker 'javascript-eslint)
-(setq-hook! 'typescript-mode-hook flycheck-checker 'javascript-eslint)
-(setq-hook! 'typescript-tsx-mode-hook flycheck-checker 'javascript-eslint)
 
-;; Setup prettier
-(add-hook 'after-init-hook #'global-prettier-mode)
-(after! prettier
-        (add-hook 'typescript-mode-hook 'prettier-mode)
-        (add-hook 'js2-mode-hook 'prettier-mode)
-        (add-hook 'typescript-tsx-mode-hook 'prettier-mode)
-        )
+;; (setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
+;; (setq-hook! 'typescript-mode-hook +format-with-lsp nil)
+;; (setq-hook! 'js-mode-hook +format-with-lsp nil)
+;; Disable LSP's formatter and use `format-all' instead because it deletes code otherwise
+(setq +format-with-lsp nil)
+
+(after! company
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.1))
+
+;; (use-package! prettier
+;;   :hook ((tsx-mode . prettier-mode)
+;;          (typescript-mode . prettier-mode)
+;;          (js-mode . prettier-mode)
+;;          (css-mode . prettier-mode)))
 
 
-(evil-snipe-override-mode 1)
+
+
 (use-package! evil-snipe
   :config (setq evil-snipe-scope 'buffer
                 evil-snipe-repeat-scope 'visible
@@ -140,7 +142,7 @@
   (dolist (sym ligatures-to-disable)
     (plist-put! +ligatures-extra-symbols sym )))
 
-;; Set ligatures for typescript mode
+;;Set ligatures for typescript mode
 (after! typescript-tsx-mode
   (set-ligatures! 'typescript-tsx-mode
         ;; Functional
@@ -174,6 +176,3 @@
 (epa-file-enable)
 
 
-;;Better tsx
-;;(require 'tsi)
-;;(require 'tsx-mode)

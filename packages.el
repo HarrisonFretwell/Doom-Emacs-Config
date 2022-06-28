@@ -52,10 +52,13 @@
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
 
-(package! prettier)
+;;(package! prettier)
 
 ;; (package! tsi
 ;;   :recipe (:host github :repo "orzechowskid/tsi.el" :files ("*.el")))
 
 ;; (package! tsx-mode
 ;;   :recipe (:host github :repo "orzechowskid/tsx-mode.el" ))
+
+;;(package! tsi :recipe (:type git :host github :repo "orzechowskid/tsi.el"))
+;;(package! tsx-mode :recipe (:type git :host github :repo "orzechowskid/tsx-mode.el"))
