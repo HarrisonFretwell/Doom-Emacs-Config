@@ -41,7 +41,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/Documents/Org/")
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -90,21 +90,10 @@
 (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
 
 ;; accept completion from copilot and fallback to company
-;; (defun my-tab ()
-;;   (interactive)
-;;   (or (copilot-accept-completion)
-;;       (company-indent-or-complete-common nil)))
 
-;; (use-package! copilot
-;;   :hook (prog-mode . copilot-mode)
-;;   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-;;          ("C-<tab>" . 'copilot-accept-completion-by-word)
-;;          :map company-active-map
-;;          ("<tab>" . 'my-tab)
-;;          ("TAB" . 'my-tab)
-;;          :map company-mode-map
-;;          ("<tab>" . 'my-tab)
-;;          ("TAB" . 'my-tab)))
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-f" . 'copilot-accept-completion)))
 
 
 ;; (setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
@@ -112,16 +101,29 @@
 ;; (setq-hook! 'js-mode-hook +format-with-lsp nil)
 ;; Disable LSP's formatter and use `format-all' instead because it deletes code otherwise
 (setq +format-with-lsp nil)
+;; (setq lsp-idle-delay 0.100)
+;; (setq lsp-completion-provider t)
+;; (defun baal-setup-lsp-company ()
+;;   (setq-local company-backends
+;;               '(company-capf company-dabbrev company-dabbrev-code)))
 
-(after! company
-  (setq company-minimum-prefix-length 1
-        company-idle-delay 0.1))
+;; (add-hook 'lsp-completion-mode-hook #'baal-setup-lsp-company)
 
-;; (use-package! prettier
-;;   :hook ((tsx-mode . prettier-mode)
-;;          (typescript-mode . prettier-mode)
-;;          (js-mode . prettier-mode)
-;;          (css-mode . prettier-mode)))
+
+;; (after! company
+;;   (setq company-minimum-prefix-length 2
+;;         company-idle-delay 0.35 ;; How long to wait before popping up
+;;         company-tooltip-limit 15 ;; Limit on how many options to display
+;;         company-tooltip-align-annotations t ;; Align annotations to the right
+;;         company-selection-wrap-around t ;; Wrap around to beginning when you hit bottom of suggestions
+;;         company-dabbrev-downcase t ;; Don't automatically downcase completions
+;;         ))
+
+(use-package! prettier
+  :hook ((tsx-mode . prettier-mode)
+         (typescript-mode . prettier-mode)
+         (js-mode . prettier-mode)
+         (css-mode . prettier-mode)))
 
 
 
@@ -135,32 +137,17 @@
 
 ;; Disable certain ligatures
 (plist-put! +ligatures-extra-symbols
-  :true          nil
-  :false         nil
-)
+            :true          nil
+            :false         nil
+            )
 (let ((ligatures-to-disable '(:true :false)))
   (dolist (sym ligatures-to-disable)
     (plist-put! +ligatures-extra-symbols sym )))
 
-;;Set ligatures for typescript mode
-(after! typescript-tsx-mode
-  (set-ligatures! 'typescript-tsx-mode
-        ;; Functional
-        :def "function"
-        :lambda "() =>"
-        :composition "compose"
-        ;; Types
-        :null "null"
-        :true "true" :false "false"
-        ;; Flow
-        :not "!"
-        :and "&&" :or "||"
-        :for "for"
-        :return "return"
-        ;; Other
-        :yield "import"
-        )
-)
+
+;; DOn't think this is working
+(after! tree-sitter
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx)))
 
 ;; Org journal
 (setq org-journal-date-prefix "#+TITLE: "
@@ -176,3 +163,21 @@
 (epa-file-enable)
 
 
+(setq deft-directory "~/Documents/Org")
+
+;; @see https://bitbucket.org/lyro/evil/issue/511/let-certain-minor-modes-key-bindings
+(with-eval-after-load 'git-timemachine
+  (evil-make-overriding-map git-timemachine-mode-map 'normal)
+  ;; force update evil keymaps after git-timemachine-mode loaded
+  (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps))
+
+
+;; Magit settings
+(setq magit-list-refs-sortby "-creatordate")
+
+
+
+;; Tsx mode
+;;(require 'origami)
+(require 'tsx-mode)
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
