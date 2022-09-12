@@ -55,6 +55,9 @@
 ;; Needed installed to work with tsx-mode
 (package! prettier)
 
-(package! tsi :recipe (:type git :host github :repo "orzechowskid/tsi.el"))
-(package! tsx-mode :recipe (:type git :host github :repo "orzechowskid/tsx-mode.el"))
-(package! origami :recipe (:type git :host github :repo "gregsexton/origami.el"))
+(package! obsidian)
+
+
+;; (package! tsi :recipe (:type git :host github :repo "orzechowskid/tsi.el"))
+;; (package! tsx-mode :recipe (:type git :host github :repo "orzechowskid/tsx-mode.el"))
+;; (package! origami :recipe (:type git :host github :repo "gregsexton/origami.el"))

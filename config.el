@@ -33,11 +33,15 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-spacegrey)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
+
+;; Set doom window size
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; (setq initial-frame-alist '((top . 1) (left . 1) (width . 143) (height . 55)))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -85,15 +89,17 @@
 ;;(add-to-list 'initial-frame-alist '(maximized))
 ;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;;Set line spacing
+(setq line-spacing 3)
 
 ;; Allow hash to be entered
 (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
 
 ;; accept completion from copilot and fallback to company
 
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :bind (("C-f" . 'copilot-accept-completion)))
+;; (use-package! copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :bind (("C-f" . 'copilot-accept-completion)))
 
 
 ;; (setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
@@ -101,13 +107,14 @@
 ;; (setq-hook! 'js-mode-hook +format-with-lsp nil)
 ;; Disable LSP's formatter and use `format-all' instead because it deletes code otherwise
 (setq +format-with-lsp nil)
-;; (setq lsp-idle-delay 0.100)
+(setq lsp-idle-delay 0.400)
+;; Give access to more memory
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 ;; (setq lsp-completion-provider t)
 ;; (defun baal-setup-lsp-company ()
 ;;   (setq-local company-backends
 ;;               '(company-capf company-dabbrev company-dabbrev-code)))
 
-;; (add-hook 'lsp-completion-mode-hook #'baal-setup-lsp-company)
 
 
 ;; (after! company
@@ -155,6 +162,7 @@
       org-journal-date-format "%a, %Y-%m-%d"
       org-journal-file-format "%Y-%m-%d.org")
 
+;; === Git setup ===
 
 ;;GPG path setup
 (setq auth-sources '("~/.authinfo.gpg"))
@@ -179,5 +187,30 @@
 
 ;; Tsx mode
 ;;(require 'origami)
-(require 'tsx-mode)
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+;; (require 'tsx-mode)
+;;   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+
+
+;; Godot
+(setq gdscript-godot-executable "/System/Volumes/Data/Applications/Godot.app")
+
+
+;; Obsidian
+(require 'obsidian)
+(obsidian-specify-path "/Users/harrisonfretwell/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian")
+;; If you want a different directory of `obsidian-capture':
+(setq obsidian-inbox-directory "Inbox")
+
+;; Replace standard command with Obsidian.el's in obsidian vault:
+(bind-key (kbd "C-c C-o") 'obsidian-follow-link-at-point 'obsidian-mode-map)
+
+;; Use either `obsidian-insert-wikilink' or `obsidian-insert-link':
+(bind-key (kbd "C-c C-l") 'obsidian-insert-wikilink 'obsidian-mode-map)
+
+;; Optionally you can also bind `obsidian-jump' and `obsidian-capture'
+;; replace "YOUR_BINDING" with the key of your choice:
+;; (bind-key (kbd "YOUR_BINDING") 'obsidian-jump)
+;; (bind-key (kbd "YOUR_BINDING") 'obsidian-capture)
+
+;; Activate detectino of Obsidian vault
+(global-obsidian-mode t)
