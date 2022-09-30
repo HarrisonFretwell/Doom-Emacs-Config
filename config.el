@@ -107,9 +107,12 @@
 ;; (setq-hook! 'js-mode-hook +format-with-lsp nil)
 ;; Disable LSP's formatter and use `format-all' instead because it deletes code otherwise
 (setq +format-with-lsp nil)
-(setq lsp-idle-delay 0.400)
+(setq lsp-idle-delay 0.200)
 ;; Give access to more memory
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
+;; Increase error line width
+(after! lsp-ui
+  (setq lsp-ui-sideline-diagnostic-max-lines 2))
 ;; (setq lsp-completion-provider t)
 ;; (defun baal-setup-lsp-company ()
 ;;   (setq-local company-backends
@@ -214,3 +217,27 @@
 
 ;; Activate detectino of Obsidian vault
 (global-obsidian-mode t)
+
+
+
+;; == HARPOON ==
+;; You can use this hydra menu that have all the commands
+(map! :n "C-SPC" 'harpoon-quick-menu-hydra)
+(map! :n "C-s" 'harpoon-add-file)
+
+;; And the vanilla commands
+(map! :leader "j c" 'harpoon-clear)
+(map! :leader "j f" 'harpoon-toggle-file)
+(map! :leader "1" 'harpoon-go-to-1)
+(map! :leader "2" 'harpoon-go-to-2)
+(map! :leader "3" 'harpoon-go-to-3)
+(map! :leader "4" 'harpoon-go-to-4)
+(map! :leader "5" 'harpoon-go-to-5)
+(map! :leader "6" 'harpoon-go-to-6)
+(map! :leader "7" 'harpoon-go-to-7)
+(map! :leader "8" 'harpoon-go-to-8)
+(map! :leader "9" 'harpoon-go-to-9)
+
+;; == Rust ==
+(after! lsp-rust
+  (setq lsp-rust-server 'rust-analyzer))

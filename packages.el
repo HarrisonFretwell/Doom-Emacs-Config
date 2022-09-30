@@ -56,7 +56,7 @@
 (package! prettier)
 
 (package! obsidian)
-
+(package! harpoon)
 
 ;; (package! tsi :recipe (:type git :host github :repo "orzechowskid/tsi.el"))
 ;; (package! tsx-mode :recipe (:type git :host github :repo "orzechowskid/tsx-mode.el"))
